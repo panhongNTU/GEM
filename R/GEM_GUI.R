@@ -1,14 +1,54 @@
-#' GEM_model GUI
+#' GEM: Fast association study for the interplay of Gene, Environment and Methylation
 #'
+#' The GEM package provides a highly efficient R tool suite for performing epigenome wide association
+#' studies (EWAS). GEM provides three major functions named \code{\link{GEM_Emodel}},
+#' \code{\link{GEM_Gmodel}} and \code{\link{GEM_GxEmodel}} to study the interplay of Gene,
+#' Environment and Methylation (GEM). Within GEM, the existing "Matrix eQTL" package is
+#' utilized and extended to study methylation quantitative trait loci (methQTL) and the
+#' interaction of genotype and environment (GxE) to determine DNA methylation variation,
+#' using matrix based iterative correlation and memory-efficient data analysis.
+#' GEM can facilitate reliable genome-wide methQTL and GxE analysis on a standard laptop
+#' computer within minutes.
+#'
+#' @examples
+#'
+#' ## Launch GEM GUI
+#' #GEM_GUI()  # remove the hash symbol for running
+#'
+#' ## Checking the vignettes for more details
+#' if(interactive()) browseVignettes(package = 'GEM')
+#'
+#' @seealso \code{\link{GEM_GUI}}
+#' @references \url{https://github.com/fastGEM/GEM}
+#' @author Hong Pan
+#' @docType package
+#' @name GEM-package
+#'
+NULL
+
+
+
+#' Graphical User Interface (GUI) for GEM
+#'
+#' The user friendly GUI for runing GEM package easily and quickly
+#'
+#' The GEM package provides a highly efficient R tool suite for performing epigenome wide association
+#' studies (EWAS). GEM provides three major functions named \code{\link{GEM_Emodel}},
+#' \code{\link{GEM_Gmodel}} and \code{\link{GEM_GxEmodel}} to study the interplay of Gene,
+#' Environment and Methylation (GEM). Within GEM, the pre-existing "Matrix eQTL" package is
+#' utilized and extended to study methylation quantitative trait loci (methQTL) and the
+#' interaction of genotype and environment (GxE) to determine DNA methylation variation,
+#' using matrix based iterative correlation and memory-efficient data analysis.
+#' GEM can facilitate reliable genome-wide methQTL and GxE analysis on a standard laptop
+#' computer within minutes.
 #'
 #' @return GEM model analysis results
 #' @import tcltk
 #' @export
-#'
+#' @seealso \code{\link{GEM-package}}
 #' @examples
 #' #GEM_GUI()
 GEM_GUI <- function(){
-    depPKG_installer()
     setModel <- TRUE   # model selection tag
     all_models <- c("Emodel", "Gmodel", "GxEmodel", "GplusEmodel", "GWASmodel")
     ifQuit <- FALSE
@@ -26,7 +66,7 @@ GEM_GUI <- function(){
                 setModel <- FALSE
                 if(paras[[8]] == "no"){
                     GEM_Emodel(env_file_name = paras[[3]],
-                               covariates_file_name = paras[[4]],
+                               covariate_file_name = paras[[4]],
                                methylation_file_name = paras[[5]],
                                Emodel_pv = as.numeric(paras[[6]]),
                                output_file_name = paste(paras[[2]], paste0(paras[[7]], "_results.txt"), sep = .Platform$file.sep),
@@ -37,12 +77,12 @@ GEM_GUI <- function(){
             }
 
         }else if (myModel == all_models[2]){
-            paras <- modelPara_GUI(5e-02, myModel, "SNP File Name", "Cvariates File Name", "Methylation File Name")
+            paras <- modelPara_GUI(5e-02, myModel, "SNP File Name", "Covariates File Name", "Methylation File Name")
             if(paras[[1]] == "no"){
                 setModel <- FALSE
                 if(paras[[8]] == "no"){
                     GEM_Gmodel(snp_file_name = paras[[3]],
-                               covariates_file_name = paras[[4]],
+                               covariate_file_name = paras[[4]],
                                methylation_file_name = paras[[5]],
                                Gmodel_pv = as.numeric(paras[[6]]),
                                output_file_name = paste(paras[[2]], paste0(paras[[7]], "_results.txt"), sep = .Platform$file.sep))
@@ -56,7 +96,7 @@ GEM_GUI <- function(){
                 setModel <- FALSE
                 if(paras[[8]] == "no"){
                     GEM_GxEmodel(snp_file_name = paras[[3]],
-                                 covariates_file_name = paras[[4]],
+                                 covariate_file_name = paras[[4]],
                                  methylation_file_name = paras[[5]],
                                  GxEmodel_pv = as.numeric(paras[[6]]),
                                  output_file_name = paste(paras[[2]], paste0(paras[[7]], "_results.txt"), sep = .Platform$file.sep))
@@ -69,12 +109,12 @@ GEM_GUI <- function(){
             if(paras[[1]] == "no"){
                 setModel <- FALSE
                 if(paras[[8]] == "no"){
-                    GEM_GplusEmodel(snp_file_name = paras[[3]],
-                                    covariates_file_name = paras[[4]],
-                                    methylation_file_name = paras[[5]],
-                                    GplusEmodel_pv = as.numeric(paras[[6]]),
-                                    output_file_name = paste(paras[[2]], paste0(paras[[7]], "_results.txt"), sep = .Platform$file.sep),
-                                    qqplot_file_name = paste(paras[[2]], paste0(paras[[7]], "_qqplot.jpg"), sep = .Platform$file.sep))
+                    # GEM_GplusEmodel(snp_file_name = paras[[3]],
+                    #                 covariate_file_name = paras[[4]],
+                    #                 methylation_file_name = paras[[5]],
+                    #                 GplusEmodel_pv = as.numeric(paras[[6]]),
+                    #                 output_file_name = paste(paras[[2]], paste0(paras[[7]], "_results.txt"), sep = .Platform$file.sep),
+                    #                 qqplot_file_name = paste(paras[[2]], paste0(paras[[7]], "_qqplot.jpg"), sep = .Platform$file.sep))
                 }else{
                     ifQuit <- TRUE
                 }
@@ -86,7 +126,7 @@ GEM_GUI <- function(){
                 if(paras[[8]] == "no"){
                     GEM_GWASmodel(env_file_name = paras[[3]],
                                   snp_file_name = paras[[4]],
-                                  covariates_file_name = paras[[5]],
+                                  covariate_file_name = paras[[5]],
                                   GWASmodel_pv = as.numeric(paras[[6]]),
                                   output_file_name = paste(paras[[2]], paste0(paras[[7]], "_results.txt"), sep = .Platform$file.sep),
                                   qqplot_file_name = paste(paras[[2]], paste0(paras[[7]], "_qqplot.jpg"), sep = .Platform$file.sep))
@@ -100,7 +140,7 @@ GEM_GUI <- function(){
     if(ifQuit){
         okMessage <- "Quit analysis."
     }else{
-        okMessage <- paste0("GEM analysis is Done!\n\nResult file ",
+        okMessage <- paste0("Result file ",
                             paste0(paras[[7]], "_results.txt"),
                             " is under path:\n  ", paras[[2]])
         tkmessageBox(title = "GEM Package",
@@ -115,12 +155,12 @@ GEM_GUI <- function(){
 
 modelPara_GUI <- function(pvalue, modelName = "Emodel",
                           fname1="env_file_name",
-                          fname2="covariates_file_name",
+                          fname2="covariate_file_name",
                           fname3="methylation_file_name"){
     cur_dir <- getwd()
     changeM <- tclVar("no")     # model change label
     quitAlabel <- tclVar("no")
-    dataDir <- tclVar(cur_dir)
+    dataDir <- tclVar(system.file('extdata',package='gem'))
     file1 <- tclVar("")
     file2 <- tclVar("")
     file3 <- tclVar("")
@@ -277,7 +317,7 @@ modelSelection_GUI <- function(models = c("Emodel", "Gmodel", "GxEmodel", "Gplus
 
     ## GUI
     tt <- tktoplevel(borderwidth = 20)
-    tkwm.title(tt, "GEMmodel: GEM model selection")
+    tkwm.title(tt, "methylation_file_nameodel: GEM model selection")
 
     model_label <- tklabel(tt, text = "Please Select Your Analysis Model:")
 
@@ -287,7 +327,7 @@ modelSelection_GUI <- function(models = c("Emodel", "Gmodel", "GxEmodel", "Gplus
     tkpack(tkradiobutton(model_rbuts, text = all_models[2], variable = myModel, value = all_models[2]), side = "left")
     tkpack(tkradiobutton(model_rbuts, text = all_models[3], variable = myModel, value = all_models[3]), side = "left")
     #tkpack(tkradiobutton(model_rbuts, text = all_models[4], variable = myModel, value = all_models[4]), side = "left")
-    tkpack(tkradiobutton(model_rbuts, text = all_models[5], variable = myModel, value = all_models[5]), side = "left")
+    #tkpack(tkradiobutton(model_rbuts, text = all_models[5], variable = myModel, value = all_models[5]), side = "left")
 
     lastline_buts <- tkframe(tt)
     tkpack(tkbutton(lastline_buts, text = "Quit", command = quitM), side = "left")
